@@ -24,11 +24,14 @@ module Korma
 
   def update(entity, columns, *predicates)
     binds = []
+
     column_sql = column_sql(columns, binds)
     where = predicates.any? ? ' WHERE ' : ''
     predicate_sql = column_sql(predicates, binds)
 
-    ["UPDATE #{entity.tablename} SET #{column_sql}#{where}#{predicate_sql}", binds]
+    sql = "UPDATE #{entity.tablename} SET #{column_sql}#{where}#{predicate_sql}"
+
+    [sql, binds]
   end
 end
 
