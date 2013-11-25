@@ -14,18 +14,25 @@ module Korma
   end
 
   def update(entity, columns, *predicates)
-    column_sql = []
     binds = []
-    columns = columns.each do |key, value|
+
+    column_sql = []
+    columns.each do |key, value|
       column_sql << "#{key} = ?"
       binds << value
     end
     column_sql = column_sql.join(', ')
 
-    where = predicates.any? ? 'WHERE' : ''
-    predicates = predicates.join(' AND ')
+    where = predicates.any? ? ' WHERE ' : ''
 
-    ["UPDATE #{entity.tablename} SET #{column_sql} #{where} #{predicates}", binds]
+    predicate_sql = []
+    predicates.each do |key, value|
+      predicate_sql << "#{key} = ?"
+      binds << value
+    end
+    predicate_sql = predicate_sql.join(', ')
+
+    ["UPDATE #{entity.tablename} SET #{column_sql}#{where}#{predicate_sql}", binds]
   end
 end
 
