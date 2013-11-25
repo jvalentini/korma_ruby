@@ -27,7 +27,10 @@ module Korma
 
     column_sql = column_sql(columns, binds)
     where = predicates.any? ? ' WHERE ' : ''
-    predicate_sql = column_sql(predicates, binds)
+    predicate_sql = ''
+    predicates.each do |pred|
+      predicate_sql += column_sql(pred, binds)
+    end
 
     sql = "UPDATE #{entity.tablename} SET #{column_sql}#{where}#{predicate_sql}"
 
