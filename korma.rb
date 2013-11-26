@@ -1,10 +1,15 @@
 module Korma
   class Entity
-    attr_reader :tablename, :columns
+    attr_reader :tablename
+    attr_reader :columns
 
     def initialize(tablename, *columns)
       @tablename = tablename
       @columns = columns
+    end
+
+    def to_s
+      @tablename.to_s
     end
   end
 
@@ -43,7 +48,7 @@ module Korma
     binds = []
 
     column_sql, values_sql = parse_column_options(columns)
-    sql = "INSERT INTO #{entity.tablename} (#{column_sql}) VALUES (#{values_sql})"
+    sql = "INSERT INTO #{entity} (#{column_sql}) VALUES (#{values_sql})"
 
     [sql, binds]
   end
@@ -59,7 +64,7 @@ module Korma
       predicate_sql += column_sql(pred, binds)
     end
 
-    sql = "UPDATE #{entity.tablename} SET #{column_sql}#{where}#{predicate_sql}"
+    sql = "UPDATE #{entity} SET #{column_sql}#{where}#{predicate_sql}"
 
     [sql, binds]
   end
